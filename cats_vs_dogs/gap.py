@@ -1,14 +1,16 @@
-from keras.models import *
-from keras.layers import *
-from keras.applications import *
-from keras.preprocessing.image import *
+###from keras.models import *
+###from keras.layers import *
+from keras_applications import *
+from keras_preprocessing.image import *
 
+import keras_applications
+import keras_preprocessing
 import h5py
 
 def write_gap(MODEL, image_size, lambda_func=None):
     width = image_size[0]
     height = image_size[1]
-    input_tensor = Input((height, width, 3))
+    input_tensor = input((height, width, 3))
     x = input_tensor
     if lambda_func:
         x = Lambda(lambda_func)(x)
@@ -28,12 +30,12 @@ def write_gap(MODEL, image_size, lambda_func=None):
         h.create_dataset("test", data=test)
         h.create_dataset("label", data=train_generator.classes)
 
-write_gap(ResNet50, (224, 224))
+write_gap(resnet50, (224, 224))
 
-write_gap(Xception, (299, 299), xception.preprocess_input)
+write_gap(xception, (299, 299), xception.preprocess_input)
 
-write_gap(InceptionV3, (299, 299), inception_v3.preprocess_input)
+write_gap(inception_v3, (299, 299), inception_v3.preprocess_input)
 
-write_gap(VGG16, (224, 224))
+###write_gap(VGG16, (224, 224))
 
-write_gap(VGG19, (224, 224))
+###write_gap(VGG19, (224, 224))
