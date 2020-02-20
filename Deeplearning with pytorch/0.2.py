@@ -1,5 +1,6 @@
 import numpy
 import torch
+
 x = torch.rand(4,4)
 print(x[:,1])
 
