@@ -1,22 +1,23 @@
-
-with tf.device('/cpu:0')
+import tensorflow as tf
+with tf.device('/cpu:0'):
+    #n
     cpu_a = tf.random.normal([1,n])
     cpu_b = tf.random.normal([n,1])
     print(cpu_a.device,cpu_b.device)
 
-with tf.device('/gpu:0')
+with tf.device('/gpu:0'):
     gpu_a = tf.random.normal([1,n])
     gpu_b = tf.random.normal([n,1])
     print(gpu_a.device,gpu_b.device)
 
 
 def cpu_run():
-    with tf.device('/cpu:0')
+    with tf.device('/cpu:0'):
         c = tf.matmul(cpu_a,cpu_b)
     return c
 
 def gpu_run():
-    with tf.device('/gpu:0')
+    with tf.device('/gpu:0'):
         c = tf.matmul(gpu_a,gpu_b)
     return c
 
