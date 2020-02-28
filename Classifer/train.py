@@ -8,10 +8,11 @@ import numpy as np
 import random
 from torchvision.datasets import ImageFolder
 from torch.optim.lr_scheduler import _LRScheduler
-# from tensorboardX import SummaryWriter
+from tensorboardX import SummaryWriter                                   #导入可视化工具TensorboardX
 from torch.autograd import Variable
 from utils.utils import WarmUpLR,get_acc,load_config,train_tf,test_tf
 
+writer = SummaryWriter()
 def main(mode=None):
     
     config = load_config(mode)
