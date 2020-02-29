@@ -43,7 +43,7 @@ def main(mode=None):
 
      # choose network
     net = resnet18().to(config.DEVICE)
-    print('The Model is ResNet50\n')  
+    print('The Model is ResNet18\n')
 
     # optimizer and loss function
     optimizer = optim.SGD(net.parameters(),lr=config.LR,momentum=0.9,weight_decay=5e-4)

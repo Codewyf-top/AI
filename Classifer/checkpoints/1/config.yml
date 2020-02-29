@@ -4,7 +4,7 @@ GPU: [0]             # list of gpu ids
 TRAIN_PATH: ./datasets/train # the path of dataset train
 TEST_PATH: ./datasets/test   # the path of dataset test
 
-EPOCH: 12
+EPOCH: 12                    # the times of training
 LR: 0.001                    # learning rate
 BATCH_SIZE: 6                # input batch size for training
 RESIZE: 96                   # resnet:96
