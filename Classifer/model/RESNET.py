@@ -7,8 +7,7 @@ class BasicBlock(nn.Module):
 
     #BasicBlock and BottleNeck block 
     #have different output size
-    #we use class attribute expansion
-    #to distinct
+
     expansion = 1
 
     def __init__(self, in_channels, out_channels, stride=1):

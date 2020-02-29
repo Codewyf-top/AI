@@ -6,8 +6,8 @@ import shutil
 random.seed(999)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--path', type=str, help='path to the dataset', default = '/home/cyh/视频/Classifer/datasets/train/')
-parser.add_argument('--output', type=str, help='path to the file list' , default = '/home/cyh/视频/Classifer/datasets/test/')
+parser.add_argument('--path', type=str, help='path to the dataset', default = 'D://学习专用/毕业设计/AI/dataset/datasets/train/')
+parser.add_argument('--output', type=str, help='path to the file list' , default = 'D://学习专用/毕业设计/AI/dataset/datasets/test/')
 args = parser.parse_args()
 
 file_all = os.listdir(args.path)
