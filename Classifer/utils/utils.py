@@ -51,12 +51,12 @@ def train_tf(x):
     x=x.resize((config.RESIZE,config.RESIZE))
     x=x.convert('RGB')
     im_aug = tfs.Compose([
-        tfs.RandomCrop(config.CROP),
-        tfs.RandomHorizontalFlip(),  # default 0.5
-        tfs.RandomRotation(15),
+        tfs.RandomCrop(config.CROP),                             # 随机裁剪
+        tfs.RandomHorizontalFlip(),  # default 0.5               # 依概率p水平翻转，p=0.5
+        tfs.RandomRotation(15),                                  # 随机旋转15度
         tfs.ColorJitter(brightness=0.5, contrast=0.5, hue=0.5),  # 认为会添加模型噪声
-        tfs.ToTensor(),
-        tfs.Normalize(config.MEAN, config.STD)
+        tfs.ToTensor(),                                          # 转为tensor：transforms.ToTensor
+        tfs.Normalize(config.MEAN, config.STD)                   # 标准化
     ])
     x = im_aug(x)
 

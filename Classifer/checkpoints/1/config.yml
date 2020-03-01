@@ -7,7 +7,7 @@ TEST_PATH: ./datasets/test   # the path of dataset test
 EPOCH: 12                    # the times of training
 LR: 0.001                    # learning rate
 BATCH_SIZE: 6                # input batch size for training
-RESIZE: 96                   # resnet:96
+RESIZE: 96                   # resnet:96 resize the pictures
 CROP: 96                     # resnet:96
 MEAN: [0.485, 0.456, 0.406]  # the mean of datasets
 STD: [0.229, 0.224, 0.225]   # the std of datasets

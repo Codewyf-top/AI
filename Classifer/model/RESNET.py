@@ -62,7 +62,7 @@ class BottleNeck(nn.Module):
             )
         
     def forward(self, x):
-        return nn.ReLU(inplace=True)(self.residual_function(x) + self.shortcut(x))
+        return nn.ReLU(inplace=True)(self.residual_function(x) + self.shortcut(x))   #激活
     
 class ResNet(nn.Module):
 
@@ -72,7 +72,7 @@ class ResNet(nn.Module):
         self.in_channels = 64
 
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=False),
+            nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=False),  # 第一个卷积层，输入3通道，输出64通道，卷积核大小3 x 3，padding1
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True))
         #we use a different inputsize than the original paper
@@ -108,8 +108,8 @@ class ResNet(nn.Module):
         
         return nn.Sequential(*layers)
 
-    def forward(self, x):
-        output = self.conv1(x)
+    def forward(self, x):   #forward方法，即向前计算，通过该方法获取网络输入数据后的输出值
+        output = self.conv1(x)          #第一次卷积
         output = self.conv2_x(output)
         output = self.conv3_x(output)
         output = self.conv4_x(output)
