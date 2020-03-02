@@ -77,7 +77,7 @@ def test_tf(x):
     return x
 
 def get_acc(output, label):
-
+#获取准确率的方法
     total = output.shape[0]
     _, pred_label = output.max(1) 
     num_correct = (pred_label == label).sum().item()
