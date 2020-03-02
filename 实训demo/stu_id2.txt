@@ -1,1 +1,0 @@
-[{1: {'name': 'jonas', 'age': '18', 'hight': '180', 'score': '4.0'}}, {2: {'name': 'stephen', 'age': '18', 'hight': '180', 'score': '4.0'}}]
