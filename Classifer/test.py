@@ -9,11 +9,11 @@ from utils.utils import load_config,train_tf,test_tf
 import os
 from torchvision.datasets import ImageFolder
 
-if __name__ == '__main__':
+if __name__ == '__main__':#验证
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str, help='model checkpoints path')
-    parser.add_argument('--weights', type=str, default='./checkpoints/1/model/11-best.pth', help='the weights file you want to test')  # 修改点
+    parser.add_argument('--weights', type=str, default='./checkpoints/1/model/11-best.pth', help='the weights file you want to test')  # 修改.pth文件
     args = parser.parse_args()
     config_path = os.path.join(args.path, 'config.yml')
     

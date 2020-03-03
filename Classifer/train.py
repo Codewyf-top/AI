@@ -9,13 +9,22 @@ import random
 from torchvision.datasets import ImageFolder
 from torch.optim.lr_scheduler import _LRScheduler
 from torch.utils.tensorboard import SummaryWriter                         #import tensorboard
-#from tensorboardX import SummaryWriter                                   #导入可视化工具TensorboardX
+from tensorboardX import SummaryWriter                                   #导入可视化工具TensorboardX
 from torch.autograd import Variable
 from utils.utils import WarmUpLR,get_acc,load_config,train_tf,test_tf
 
 #writer = SummaryWriter() #tensorboard可视化工具初始化
 def main(mode=None):
-    
+    global name, logger
+
+    #Tag_ResidualBlocks_BatchSize
+    name = "my_log"
+    logger = SummaryWriter("runs/" + name)
+
+    cat_dir = "D:/Codewyf/AI/data/datasets/test/cat_test/"
+    dog_dir = "D:/Codewyf/AI/data/datasets/test/dog_test/"
+
+
     config = load_config(mode)
     
     torch.manual_seed(config.SEED)                  #为CPU设计种子用于生成随机数，以使得结果是确定的
@@ -31,6 +40,14 @@ def main(mode=None):
     test_set = ImageFolder(config.TEST_PATH, transform=test_tf)
     length_test = len(test_set)
     test_data=torch.utils.data.DataLoader(test_set, batch_size=config.BATCH_SIZE, shuffle=True)
+
+    cat_test_set = ImageFolder(cat_dir,transform=test_tf)
+    length_test = len(test_set)
+    cat_test_data = torch.utils.data.DataLoader(test_set, batch_size = config.BATCH_SIZE, shuffle=True)
+
+    dog_test_set = ImageFolder(dog_dir,transform=test_tf)
+    length_test = len(test_set)
+    dog_test_data = torch.utils.data.DataLoader(test_set, batch_size = config.BATCH_SIZE, shuffle=True)
     
     # INIT GPU初始化GPU
     os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(str(e) for e in config.GPU)
@@ -69,12 +86,12 @@ def main(mode=None):
             train_scheduler.step(epoch)
     
         ### train ###
-        net.train()   
+        net.train()#在训练前加上
         train_loss = 0.0 # cost function error
         train_correct = 0.0
 
         for i, data in enumerate(train_data):
-
+            steps = len(train_data)*(epoch-1)+i                     #计算训练到了第多少步
             if epoch <= config.WARM:
                 warmup_scheduler.step()
 
@@ -88,25 +105,32 @@ def main(mode=None):
             train_loss +=loss.item()
 
             # backward
-            optimizer.zero_grad()
+            optimizer.zero_grad()#把梯度置零，也就是把loss关于weight的导数变成0
             loss.backward()
             optimizer.step()
-            
-            print('Training Epoch: {epoch} [{trained_samples}/{total_samples}]\tLoss: {:0.4f}\tAcc: {:0.4f}\tLR: {:0.6f}'.format(
-                train_loss/(i+1),
-                train_correct/(i+1),
-                optimizer.param_groups[0]['lr'],
-                epoch=epoch,
-                trained_samples=i * config.BATCH_SIZE + len(image),
-                total_samples=length_train
-            ))
+
+            #设置没多少个epoch输出一次损失
+            if i%2 ==0:
+                train_loss_log = train_loss/(i+1)
+                train_correct_log = train_correct/(i+1)
+                logger.add_scalar('train_loss',train_loss_log, steps)
+                logger.add_scalar('train_acc',train_correct_log, steps)
+                print(
+                    'Training Epoch: {epoch} [{trained_samples}/{total_samples}]\tLoss: {:0.4f}\tAcc: {:0.4f}\tLR: {:0.6f}'.format(
+                        train_loss / (i + 1),
+                        train_correct / (i + 1),
+                        optimizer.param_groups[0]['lr'],
+                        epoch=epoch,
+                        trained_samples=i * config.BATCH_SIZE + len(image),
+                        total_samples=length_train
+                    ))
         
         ### eval ### 
-        net.eval()
+        net.eval()#在测试前使用
         test_loss = 0.0     # cost function error
         test_correct = 0.0
 
-        for i, data in enumerate(test_data):
+        for i, data in enumerate(test_data):#测试刚刚训练的epoch的准确率
             images, labels = data
             images, labels = images.to(config.DEVICE),labels.to(config.DEVICE)
 
@@ -121,6 +145,39 @@ def main(mode=None):
             test_samples=i * config.BATCH_SIZE + len(images),
             total_samples=length_test
         ))
+        logger.add_scalar('test_loss',test_loss/(i+1),epoch)
+        logger.add_scalar('test_acc',test_correct/(i+1),epoch)
+
+        #eval
+        net.eval()
+        test_loss = 0.0
+        test_correct = 0.0
+        for i, data in enumerate(cat_test_data):
+            images, labels = data
+            images, labels = images.to(config.DEVICE), labels.to(config.DEVICE)
+            outputs = net(images)
+            loss = loss_function(outputs, labels)
+            test_loss += loss.item()
+            test_correct += get_acc(outputs, labels)
+        logger.add_scalar('test_loss_cat', test_loss/(i+1),epoch)
+        logger.add_scalar('test_acc_cat', test_correct/(i+1),epoch)
+
+        #eval
+        net.eval()
+        test_loss = 0.0
+        test_correct = 0.0
+        for i, data in enumerate(dog_test_data):
+            images, labels = data
+            images, labels = images.to(config.DEVICE), labels.to(config.DEVICE)
+            ouputs = net(images)
+            loss = loss_function(outputs, labels)
+            test_loss += loss.item()
+            test_correct += get_acc(outputs, labels)
+        logger.add_scalar('test_loss_dog', test_loss/(i+1), epoch)
+        logger.add_scalar('test_acc_dog', test_correct/(i+1), epoch)
+
+
+
         print()
 
         #start to save best performance model 保存当前训练的最佳的模型
