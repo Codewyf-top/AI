@@ -120,7 +120,15 @@ def main(mode=None):
                     epoch=epoch,
                     trained_samples=i * config.BATCH_SIZE + len(image),
                     total_samples=length_train))
-        
+        # start to save best performance model 保存当前训练的最佳的模型
+        acc = test_correct / (i+1)
+        if epch > config.MILESTONES[1] and best_acc < acc:
+            torch.save(net.state_dict(),checkpoint_path.format(epoch = epoch, type = 'best'))
+            best_acc = acc
+            continue
+        if not epoch % config.SAVE_EPOCH:
+            torch.save(net.state_dict(), checkpoint_path.format(epoch = epoch, type = 'regular'))
+
         ### eval ### 
         ###分类别进行测试###
         net.eval()
