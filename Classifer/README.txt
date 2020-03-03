@@ -7,4 +7,5 @@
 
 测试： 训练生成的模型在./checkpoints/1/model里面，找到最新的含有best的模型。把模型地址写到test.py的修改点处。
 运行： python test.py --path ./checkpoints/1/
-
+tensorboard：
+运行：tensorboard --logdir runs

@@ -124,7 +124,16 @@ def main(mode=None):
                         trained_samples=i * config.BATCH_SIZE + len(image),
                         total_samples=length_train
                     ))
-        
+        # start to save best performance model 保存当前训练的最佳的模型
+        acc = test_correct / (i + 1)
+        if epoch > config.MILESTONES[1] and best_acc < acc:
+            torch.save(net.state_dict(), checkpoint_path.format(epoch=epoch, type='best'))
+            best_acc = acc
+            continue
+
+        if not epoch % config.SAVE_EPOCH:
+            torch.save(net.state_dict(), checkpoint_path.format(epoch=epoch, type='regular'))
+
         ### eval ### 
         net.eval()#在测试前使用
         test_loss = 0.0     # cost function error
@@ -180,15 +189,6 @@ def main(mode=None):
 
         print()
 
-        #start to save best performance model 保存当前训练的最佳的模型
-        acc = test_correct/(i+1)  
-        if epoch > config.MILESTONES[1] and best_acc < acc:
-            torch.save(net.state_dict(), checkpoint_path.format(epoch=epoch, type='best'))
-            best_acc = acc
-            continue
 
-        if not epoch % config.SAVE_EPOCH:
-            torch.save(net.state_dict(), checkpoint_path.format(epoch=epoch, type='regular'))
-                 
 if __name__ == "__main__":
     main()
