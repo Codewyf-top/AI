@@ -109,7 +109,7 @@ def main(mode=None):
             loss.backward()
             optimizer.step()
 
-            #设置没多少个epoch输出一次损失
+            #设置每多少个epoch输出一次损失
             if i%2 ==0:
                 train_loss_log = train_loss/(i+1)
                 train_correct_log = train_correct/(i+1)
