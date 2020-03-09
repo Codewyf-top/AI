@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
-
+from torch.autograd import Variable
+from tensorboardX import SummaryWriter
 class BasicBlock(nn.Module):
     """Basic Block for resnet 18 and resnet 34
     """
@@ -146,3 +147,13 @@ def resnet152():
     """ return a ResNet 152 object
     """
     return ResNet(BottleNeck, [3, 8, 36, 3])
+
+
+
+"""dummy_input = Variable(torch.rand(13, 1, 28, 28)) #假设输入13张1*28*28的图片
+model = ResNet(BasicBlock, [3, 4, 6, 3])
+global name
+name = "my_log"
+
+w = SummaryWriter("/runs"+name)
+w.add_graph(model, (dummy_input, ))""
