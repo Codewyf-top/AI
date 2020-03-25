@@ -1,7 +1,6 @@
-import torch
 import torch.nn as nn
-from torch.autograd import Variable
-from tensorboardX import SummaryWriter
+
+
 class BasicBlock(nn.Module):
     """Basic Block for resnet 18 and resnet 34
     """
@@ -102,11 +101,11 @@ class ResNet(nn.Module):
         # 扩维
         # we have num_block blocks per layer, the first block 
         # could be 1 or 2, other blocks would always be 1
-        strides = [stride] + [1] * (num_blocks - 1)
+        strides = [stride] + [1] * (num_blocks - 1)#减少特征图尺寸
         layers = []
         # 特判第一残差块
         for stride in strides:
-            layers.append(block(self.in_channels, out_channels, stride))
+            layers.append(block(self.in_channels, out_channels, stride))#不减少特征图尺寸
             self.in_channels = out_channels * block.expansion
         
         return nn.Sequential(*layers)
