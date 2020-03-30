@@ -25,7 +25,7 @@ class WarmUpLR(_LRScheduler):
 
 
 def load_config(mode=None):
-    
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', '--checkpoints', type=str, help='model checkpoints path')
 

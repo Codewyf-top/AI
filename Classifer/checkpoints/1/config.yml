@@ -1,8 +1,8 @@
 SEED: 999            # random seed
 GPU: [0]             # list of gpu ids
 
-TRAIN_PATH: D:/Codewyf/AI/data/datasets/train # the path of dataset train
-TEST_PATH: D:/Codewyf/AI/data/datasets/test   # the path of dataset test
+TRAIN_PATH: E:/datasets/train # the path of dataset train
+TEST_PATH: E:/datasets/test   # the path of dataset test
 
 EPOCH: 12     #12
 LR: 0.001                    # learning rate
